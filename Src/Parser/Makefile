@@ -1,4 +1,4 @@
-NAME=test-obj-parser
+NAME=obj-parser
 CC=g++
 CC_FLAGS=-std=c++17
 all: build-parser

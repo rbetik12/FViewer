@@ -2,7 +2,7 @@
 	#include <stdio.h>
 	#include <stdlib.h>
 	#include <string.h>
-	#include "main.cpp"
+	#include "parser.cpp"
 	extern FILE *yyin;
 	extern char* yyval;
 	extern int lineno;
@@ -37,23 +37,22 @@ objcmd:
 	
 vertex:
 	VERTEX FLOAT FLOAT FLOAT {
-		printf("Vertex: %f %f %f\n", $2, $3, $4);
 	}
 	;
 
 normal:
 	NORMAL FLOAT FLOAT FLOAT {
-		printf("Normal: %f %f %f\n", $2, $3, $4);
+
 	}
 	;
 	
 uv:
 	UV FLOAT FLOAT FLOAT {
-		printf("UV: %f %f\n", $2, $3);
+
 	}
 	|
 	UV FLOAT FLOAT {
-		printf("UV: %f %f\n", $2, $3);
+
 	}
 
 face:
@@ -67,15 +66,22 @@ indexes:
 
 index_type:
 	INTEGER {
-		printf("Vertex\n");
+
 	}
 	| INTEGER '/' INTEGER '/' INTEGER {
-		printf("Vertex/UV/Normal\n");
+
 	}
 	| INTEGER '/' '/' INTEGER {
-		printf("Vertex/Normal\n");
+
 	}
 	| INTEGER '/' INTEGER {
-		printf("Vertex/UV\n");
+
 	}
 	;
+
+%%
+
+void yyerror (char* str) {
+    fprintf(stderr, "Syntax error at line %d. %s\n", lineno, str);
+    exit(1);
+}
