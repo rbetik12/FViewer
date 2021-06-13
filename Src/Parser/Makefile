@@ -17,4 +17,5 @@ clean:
 	-del *.o
 	-del parser.tab.*
 	-del lex.yy.*
+	-del *.bin
 	
