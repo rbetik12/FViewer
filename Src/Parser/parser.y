@@ -16,6 +16,9 @@
     std::vector<Vec3> normals;
     std::vector<Vec2> uvs;
     std::vector<int> indexes;
+    std::vector<VertexUVNormal> vtUvNormVec;
+    std::vector<VertexUV> vtUvVec;
+    std::vector<VertexNormal> vtNormalVec;
 %}
 
 %start obj
@@ -82,14 +85,27 @@ index_type:
 	// vertex / uv / normal
 	| INTEGER '/' INTEGER '/' INTEGER {
         type = VertexParseType::VertUvNorm;
+        VertexUVNormal vertex;
+        vertex.vertex = vertexes[$1 - 1];
+        vertex.uv = uvs[$3 - 1];
+        vertex.normal = normals[$5 - 1];
+        vtUvNormVec.push_back(vertex);
 	}
 	// vertex / normal
 	| INTEGER '/' '/' INTEGER {
         type = VertexParseType::VertNorm;
+        VertexNormal vertex;
+        vertex.vertex = vertexes[$1 - 1];
+        vertex.normal = normals[$4 - 1];
+        vtNormalVec.push_back(vertex);
 	}
 	// vertex / uv
 	| INTEGER '/' INTEGER {
         type = VertexParseType::VertUv;
+        VertexUV vertex;
+        vertex.vertex = vertexes[$1 - 1];
+        vertex.uv = uvs[$3 - 1];
+        vtUvVec.push_back(vertex);
 	}
 	;
 

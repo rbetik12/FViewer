@@ -5,26 +5,30 @@
 #include "../Core/Util/timer.hpp"
 
 extern FILE* yyin;
+
 extern int yyparse();
 
-extern std::vector<Vec3> vertexes;
-extern std::vector<Vec3> normals;
-extern std::vector<Vec2> uvs;
+extern std::vector <Vec3> vertexes;
+extern std::vector <Vec3> normals;
+extern std::vector <Vec2> uvs;
 extern std::vector<int> indexes;
+extern std::vector <VertexUVNormal> vtUvNormVec;
 
 VertexParseType type;
 
 const char* GetModelNameFromFilePath(const char* filepath);
+
 const char* GetModelFaceType();
+
 void SerializeModel(const char* modelName);
 
-int main (int argc, const char *argv[]) {
+int main(int argc, const char* argv[]) {
     const char* modelName;
     const char* modelFaceType;
-	if (argc < 2) {
-		fprintf(stderr, "test-obj-parser <obj file name>\n");
-		exit(1);
-	}
+    if (argc < 2) {
+        fprintf(stderr, "obj-parser <obj file name>\n");
+        exit(1);
+    }
 
     yyin = fopen(argv[1], "r");
     {
@@ -71,14 +75,41 @@ void SerializeModel(const char* modelName) {
         exit(EXIT_FAILURE);
     }
 
-    if (type == VertexParseType::Vert) {
-        header.type = type;
-        header.indexAmount = indexes.size();
-        header.vertexAmount = vertexes.size();
+    header.type = type;
 
-        fwrite(&header, sizeof(header), 1, modelFile);
-        fwrite(vertexes.data(), sizeof(Vec3), vertexes.size(), modelFile);
-        fwrite(indexes.data(), sizeof(int), indexes.size(), modelFile);
+    switch (type) {
+        case VertexParseType::Vert:
+            header.indexAmount = indexes.size();
+            header.vertexAmount = vertexes.size();
+
+            fwrite(&header, sizeof(header), 1, modelFile);
+            fwrite(vertexes.data(), sizeof(Vec3), vertexes.size(), modelFile);
+            fwrite(indexes.data(), sizeof(int), indexes.size(), modelFile);
+            break;
+        case VertexParseType::VertUvNorm:
+            header.indexAmount = 0;
+            header.vertexAmount = vertexes.size();
+
+            fwrite(&header, sizeof(header), 1, modelFile);
+            fwrite(vertexes.data(), sizeof(VertexUVNormal), vertexes.size(), modelFile);
+            break;
+        case VertexParseType::VertNorm:
+            header.indexAmount = 0;
+            header.vertexAmount = vertexes.size();
+
+            fwrite(&header, sizeof(header), 1, modelFile);
+            fwrite(vertexes.data(), sizeof(VertexNormal), vertexes.size(), modelFile);
+            break;
+        case VertexParseType::VertUv:
+            header.indexAmount = 0;
+            header.vertexAmount = vertexes.size();
+
+            fwrite(&header, sizeof(header), 1, modelFile);
+            fwrite(vertexes.data(), sizeof(VertexUV), vertexes.size(), modelFile);
+            break;
+        default:
+            std::cerr << "Unknown type!" << std::endl;
+            break;
     }
 
     fclose(modelFile);
