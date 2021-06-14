@@ -6,7 +6,7 @@ public:
 
     ~Timer() {
         finish = std::chrono::high_resolution_clock::now();
-        std::cout << "Time elapsed: " << std::to_string(std::chrono::duration_cast<std::chrono::microseconds>(finish - start).count()) << "\n";
+        std::cout << "Time elapsed: " << std::to_string(std::chrono::duration_cast<std::chrono::microseconds>(finish - start).count() / 1000.0f) << " ms\n";
     }
 
 private:

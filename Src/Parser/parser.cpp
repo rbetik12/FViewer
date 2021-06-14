@@ -15,10 +15,12 @@ extern std::vector<int> indexes;
 VertexParseType type;
 
 const char* GetModelNameFromFilePath(const char* filepath);
+const char* GetModelFaceType();
 void SerializeModel(const char* modelName);
 
 int main (int argc, const char *argv[]) {
     const char* modelName;
+    const char* modelFaceType;
 	if (argc < 2) {
 		fprintf(stderr, "test-obj-parser <obj file name>\n");
 		exit(1);
@@ -33,6 +35,9 @@ int main (int argc, const char *argv[]) {
     fclose(yyin);
 
     modelName = GetModelNameFromFilePath(argv[1]);
+    modelFaceType = GetModelFaceType();
+
+    std::cout << "Model face type is: " << modelFaceType << std::endl;
 
     {
         Timer timer;
@@ -77,4 +82,19 @@ void SerializeModel(const char* modelName) {
     }
 
     fclose(modelFile);
+}
+
+const char* GetModelFaceType() {
+    switch (type) {
+        case VertexParseType::Vert:
+            return "Vertex";
+        case VertexParseType::VertNorm:
+            return "Vertex and normal";
+        case VertexParseType::VertUv:
+            return "Vertex and uv";
+        case VertexParseType::VertUvNorm:
+            return "Vertex, uv and normal";
+        default:
+            return "Unknown type";
+    }
 }
