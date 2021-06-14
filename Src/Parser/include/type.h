@@ -1,4 +1,5 @@
 #pragma once
+#include <cstdint>
 
 enum class VertexParseType {
     VertUvNorm,
@@ -42,6 +43,6 @@ struct VertexNormal {
 #pragma pack(1)
 struct ModelHeader {
     VertexParseType type;
-    size_t vertexAmount;
-    size_t indexAmount;
+    uint64_t vertexAmount;
+    uint64_t indexAmount;
 };
