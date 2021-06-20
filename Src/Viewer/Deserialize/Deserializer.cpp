@@ -34,3 +34,7 @@ std::pair<Vec3*, int*> Deserializer::GetData() const {
 
     return std::pair<Vec3*, int*>(vertexes, indexes);
 }
+
+std::pair<size_t, size_t> Deserializer::GetAmount() const {
+    return std::pair<size_t, size_t>(header.vertexAmount, header.indexAmount);
+}
