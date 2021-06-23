@@ -5,18 +5,8 @@
 #include "../../Debug/Debug.h"
 
 void Renderer::LoadData(Vec3* vertexes, int* indexes, size_t vertexAmount, size_t indexAmount) {
-    float triangleVertices[] = {
-            -0.5, -0.5, 0,
-            0, 0.5, 0,
-            0.5, -0.5, 0
-    };
-
-    unsigned int triangleIndexes[] = {
-            0, 1, 2
-    };
-
-    vertexBuffer = std::make_unique<VertexBuffer>(triangleVertices, sizeof(triangleVertices));
-    indexBuffer = std::make_unique<IndexBuffer>(triangleIndexes, sizeof(triangleIndexes) / sizeof(uint32_t));
+    vertexBuffer = std::make_unique<VertexBuffer>(vertexes, vertexAmount * sizeof(Vec3));
+    indexBuffer = std::make_unique<IndexBuffer>((uint32_t*)indexes, indexAmount);
     VertexBufferLayout layout;
     layout.Push<float>(3);
     vertexArray = std::make_unique<VertexArray>();
@@ -24,31 +14,32 @@ void Renderer::LoadData(Vec3* vertexes, int* indexes, size_t vertexAmount, size_
 }
 
 void Renderer::Run() {
-    Shader shader("basic.vert", "basic.frag");
+    Shader shader("vertex_only.vert", "vertex_only.frag");
 
     OpenGLDebug::Init();
 
-    while(!window->IsShouldClose()) {
+    while (!window->IsShouldClose()) {
         glfwPollEvents();
-        Renderer::Clear();
+        Clear();
 
-        /*glm::mat4 projection = glm::perspective(glm::radians(45.0f),
-                                                (GLfloat)window->GetWidth() / (GLfloat)window->GetHeight(), 0.1f, 300.0f);
+        glm::mat4 projection = glm::perspective(glm::radians(45.0f),
+                                                (GLfloat) window->GetWidth() / (GLfloat) window->GetHeight(), 0.1f, 300.0f);
         glm::mat4 view = glm::lookAt(
                 glm::vec3(4, 3, 3),
                 glm::vec3(0, 0, 0),
                 glm::vec3(0, 1, 0)
-                );
+        );
 
         glm::mat4 model = glm::mat4(1.0f);
         model = glm::translate(model, glm::vec3(0, 0, 0));
-
+        model = glm::rotate(model, glm::radians(50.0f * (float) glfwGetTime()), glm::vec3(0.0f, 0, 1.0f));
+        model = glm::scale(model, glm::vec3(1, 1, 1));
         shader.Bind();
         shader.SetUniformMat4f("projection", projection);
         shader.SetUniformMat4f("view", view);
         shader.SetUniformMat4f("model", model);
         vertexArray->Bind();
-        indexBuffer->Bind();*/
+        indexBuffer->Bind();
 
         Draw(*vertexArray, *indexBuffer, shader);
         window->SwapBuffers();
@@ -57,16 +48,16 @@ void Renderer::Run() {
 
 Renderer::Renderer() {
     window = std::make_unique<Window>(800, 600, "FViewer");
-    Renderer::Init();
+    Init();
 }
 
 void Renderer::Clear() {
-    glClear(GL_COLOR_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 }
 
 void Renderer::Init() {
-//    glEnable(GL_DEPTH_TEST);
+    glEnable(GL_DEPTH_TEST);
     glEnable(GL_MULTISAMPLE);
 //    glEnable(GL_BLEND);
 //    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);

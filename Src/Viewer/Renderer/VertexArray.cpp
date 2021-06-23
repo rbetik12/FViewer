@@ -17,7 +17,7 @@ void VertexArray::UnBind() const {
 void VertexArray::AddBuffer(const VertexBuffer& vb, const VertexBufferLayout& layout) {
     Bind();
     vb.Bind();
-    const auto& elements = layout.GetElements();
+    const auto& elements = layout.elements;
     unsigned int offset = 0;
     for (unsigned int i = 0; i < elements.size(); i++) {
         const auto& element = (elements.begin() + i);

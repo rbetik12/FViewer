@@ -16,10 +16,12 @@ struct VertexBufferElement {
 
 class VertexBufferLayout {
 private:
-    std::vector<VertexBufferElement> elements;
     unsigned int stride;
 public:
+    std::vector<VertexBufferElement> elements;
+
     VertexBufferLayout() : stride(0) {
+        elements.reserve(5);
     }
 
     template<typename T>
@@ -36,6 +38,7 @@ template<>
 inline void VertexBufferLayout::Push<float>(unsigned int count, bool normalized) {
     elements.push_back({GL_FLOAT, count, (unsigned char) (normalized ? GL_TRUE : GL_FALSE)});
     stride += count * VertexBufferElement::GetSizeOfType(GL_FLOAT);
+    std::cout << elements.size() << std::endl;
 }
 
 template<>

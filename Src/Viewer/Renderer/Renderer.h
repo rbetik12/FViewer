@@ -22,9 +22,9 @@ private:
     std::unique_ptr<VertexArray> vertexArray;
     std::unique_ptr<Window> window;
 
-    static void Init();
+    void Init();
 
-    static void Clear();
+    void Clear();
 
     void Draw(const VertexArray& vao, const IndexBuffer& ebo, const Shader& shader);
 };
