@@ -6,12 +6,14 @@
 #include "IndexBuffer.h"
 #include "VertexArray.h"
 #include "Window.h"
+#include "Shader.h"
 
 class Renderer {
 public:
     Renderer();
 
     void LoadData(Vec3* vertexes, int* indexes, size_t vertexAmount, size_t indexAmount);
+
     void Run();
 
 private:
@@ -21,6 +23,8 @@ private:
     std::unique_ptr<Window> window;
 
     static void Init();
+
     static void Clear();
-    void Draw(const VertexArray& vao, const IndexBuffer& ebo);
+
+    void Draw(const VertexArray& vao, const IndexBuffer& ebo, const Shader& shader);
 };

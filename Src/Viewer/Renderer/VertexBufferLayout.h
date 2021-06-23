@@ -3,6 +3,7 @@
 #include <vector>
 #include <cassert>
 #include <glad/glad.h>
+#include <iostream>
 
 
 struct VertexBufferElement {
@@ -19,7 +20,6 @@ private:
     unsigned int stride;
 public:
     VertexBufferLayout() : stride(0) {
-
     }
 
     template<typename T>
@@ -27,7 +27,7 @@ public:
         static_assert(true, "");
     }
 
-    inline const std::vector<VertexBufferElement>& GetElements() const& { return elements; }
+    [[nodiscard]] inline std::vector<VertexBufferElement> GetElements() const& { return elements; }
 
     inline unsigned int GetStride() const { return stride; }
 };

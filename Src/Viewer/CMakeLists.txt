@@ -3,6 +3,7 @@ cmake_minimum_required (VERSION 3.8)
 include_directories(../Parser/include)
 include_directories(../../Lib/glad/include)
 include_directories(../../Lib/glfw/include)
+include_directories(../../Lib/glm)
 add_executable(${PROJECT_NAME} main.cpp
         Deserialize/Deserializer.cpp
         Deserialize/Deserializer.h
@@ -13,7 +14,8 @@ add_executable(${PROJECT_NAME} main.cpp
         Renderer/VertexBufferLayout.h Renderer/VertexBufferLayout.cpp
         Renderer/VertexBufferElement.cpp
         Renderer/Window.h Renderer/Window.cpp
-        )
+        Renderer/Shader.h Renderer/Shader.cpp
+        ../Debug/Debug.cpp ../Debug/Debug.h)
 
 target_link_libraries(${PROJECT_NAME} glad glfw)
 
