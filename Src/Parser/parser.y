@@ -56,6 +56,10 @@ normal:
 	NORMAL FLOAT FLOAT FLOAT {
         normals.push_back({$2, $3, $4});
 	}
+	|
+	NORMAL INTEGER INTEGER INTEGER {
+        normals.push_back({$2, $3, $4});
+    }
 	;
 	
 uv:
@@ -66,6 +70,15 @@ uv:
 	UV FLOAT FLOAT {
         uvs.push_back({$2, $3});
 	}
+	|
+	UV INTEGER INTEGER INTEGER {
+            uvs.push_back({$2, $3});
+    }
+    |
+	UV INTEGER INTEGER {
+	    uvs.push_back({$2, $3});
+	}
+	;
 
 face:
 	FACE indexes
