@@ -8,6 +8,15 @@ uniform mat4 projection;
 uniform mat4 view;
 uniform mat4 model;
 
+out FRAG_OUT {
+    vec3 normal;
+    vec3 position;
+    vec2 uv;
+} fragOut;
+
 void main() {
+    fragOut.normal = normal;
+    fragOut.uv = uv;
+    fragOut.position = vec3(model * vec4(position.xyz, 1.0f));
     gl_Position = projection * view * model * vec4(position.xyz, 1.0f);
 }
