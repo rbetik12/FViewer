@@ -35,7 +35,7 @@ void Renderer::Run() {
         glm::mat4 projection = glm::perspective(glm::radians(45.0f),
                                                 (GLfloat) window->GetWidth() / (GLfloat) window->GetHeight(), 0.1f, 300.0f);
         glm::mat4 view = glm::lookAt(
-                glm::vec3(2, 3, 3),
+                glm::vec3(10, 10, 3),
                 glm::vec3(0, 0, 0),
                 glm::vec3(0, 1, 0)
         );
