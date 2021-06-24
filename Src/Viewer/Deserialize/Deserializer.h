@@ -13,6 +13,7 @@ public:
     }
 
     std::pair<Vec3*, int*> GetData() const;
+    std::pair<VertexUVNormal*, size_t> GetVertUvNormData() const;
     std::pair<size_t, size_t> GetAmount() const;
 private:
     ModelHeader header;

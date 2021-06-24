@@ -38,3 +38,11 @@ std::pair<Vec3*, int*> Deserializer::GetData() const {
 std::pair<size_t, size_t> Deserializer::GetAmount() const {
     return std::pair<size_t, size_t>(header.vertexAmount, header.indexAmount);
 }
+
+std::pair<VertexUVNormal*, size_t> Deserializer::GetVertUvNormData() const {
+    auto* vertexes = new VertexUVNormal[header.vertexAmount];
+
+    fread(vertexes, sizeof(VertexUVNormal), header.vertexAmount, file);
+
+    return std::pair<VertexUVNormal*, size_t>(vertexes, header.vertexAmount);
+}

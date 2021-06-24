@@ -13,8 +13,20 @@ int main(int argc, char* argv[]) {
 	Renderer renderer;
 
     switch (deserializer.GetDataType()) {
-        case VertexParseType::VertUvNorm:
+        case VertexParseType::VertUvNorm: {
+            VertexUVNormal* vertexes = nullptr;
+            size_t amount = 0;
+
+            std::pair<VertexUVNormal*, size_t> data = deserializer.GetVertUvNormData();
+
+            vertexes = data.first;
+            amount = data.second;
+            renderer.LoadData(vertexes, amount);
+            renderer.Run();
+
+            delete [] vertexes;
             break;
+        }
         case VertexParseType::VertUv:
             break;
         case VertexParseType::VertNorm:

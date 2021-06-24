@@ -38,7 +38,6 @@ template<>
 inline void VertexBufferLayout::Push<float>(unsigned int count, bool normalized) {
     elements.push_back({GL_FLOAT, count, (unsigned char) (normalized ? GL_TRUE : GL_FALSE)});
     stride += count * VertexBufferElement::GetSizeOfType(GL_FLOAT);
-    std::cout << elements.size() << std::endl;
 }
 
 template<>

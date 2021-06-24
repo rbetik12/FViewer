@@ -50,17 +50,71 @@ vertex:
 	VERTEX FLOAT FLOAT FLOAT {
 	    vertexes.push_back({$2, $3, $4});
 	}
+	|
+	VERTEX FLOAT FLOAT INTEGER {
+    	vertexes.push_back({$2, $3, $4});
+    }
+    |
+    VERTEX FLOAT INTEGER FLOAT {
+        vertexes.push_back({$2, $3, $4});
+    }
+    |
+    VERTEX FLOAT INTEGER INTEGER {
+        vertexes.push_back({$2, $3, $4});
+    }
+    |
+    VERTEX INTEGER FLOAT FLOAT {
+        vertexes.push_back({$2, $3, $4});
+    }
+    |
+    VERTEX INTEGER FLOAT INTEGER {
+        vertexes.push_back({$2, $3, $4});
+    }
+    |
+    VERTEX INTEGER INTEGER FLOAT {
+        vertexes.push_back({$2, $3, $4});
+    }
+    |
+    VERTEX INTEGER INTEGER INTEGER {
+        vertexes.push_back({$2, $3, $4});
+    }
+    |
 	;
 
 normal:
 	NORMAL FLOAT FLOAT FLOAT {
         normals.push_back({$2, $3, $4});
-	}
-	|
-	NORMAL INTEGER INTEGER INTEGER {
+    }
+    |
+    NORMAL FLOAT FLOAT INTEGER {
         normals.push_back({$2, $3, $4});
     }
-	;
+    |
+    NORMAL FLOAT INTEGER FLOAT {
+        normals.push_back({$2, $3, $4});
+    }
+    |
+    NORMAL FLOAT INTEGER INTEGER {
+        normals.push_back({$2, $3, $4});
+    }
+    |
+    NORMAL INTEGER FLOAT FLOAT {
+        normals.push_back({$2, $3, $4});
+    }
+    |
+    NORMAL INTEGER FLOAT INTEGER {
+        normals.push_back({$2, $3, $4});
+    }
+    |
+    NORMAL INTEGER INTEGER FLOAT {
+        normals.push_back({$2, $3, $4});
+    }
+    |
+    NORMAL INTEGER INTEGER INTEGER {
+        normals.push_back({$2, $3, $4});
+    }
+    |
+    ;
 	
 uv:
 	UV FLOAT FLOAT FLOAT {
@@ -71,19 +125,24 @@ uv:
         uvs.push_back({$2, $3});
 	}
 	|
-	UV INTEGER INTEGER INTEGER {
-            uvs.push_back({$2, $3});
+	UV FLOAT INTEGER {
+        uvs.push_back({$2, $3});
     }
     |
-	UV INTEGER INTEGER {
-	    uvs.push_back({$2, $3});
-	}
+    UV INTEGER FLOAT {
+        uvs.push_back({$2, $3});
+    }
+    |
+    UV INTEGER INTEGER {
+        uvs.push_back({$2, $3});
+    }
+    |
 	;
 
 face:
 	FACE indexes
 	;
-	
+
 indexes:
 	index_type
 	| indexes index_type

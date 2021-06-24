@@ -13,6 +13,7 @@ public:
     Renderer();
 
     void LoadData(Vec3* vertexes, int* indexes, size_t vertexAmount, size_t indexAmount);
+    void LoadData(VertexUVNormal* vertexes, size_t amount);
 
     void Run();
 
@@ -27,4 +28,5 @@ private:
     void Clear();
 
     void Draw(const VertexArray& vao, const IndexBuffer& ebo, const Shader& shader);
+    void Draw(const VertexArray& vao, const VertexBuffer& vbo, const Shader& shader);
 };

@@ -63,9 +63,9 @@
     return INTEGER;
 }
 
-[-+]?[0-9]+\.?[0-9]+ {
+[-+]?[0-9]+(\.?[0-9]+(e[-+][0-9]+)?)? {
     yylval.f = atof(yytext);
-	//printf("Float\n");
+	//printf("Float %f\n", atof(yytext));
     return FLOAT;
 }
 

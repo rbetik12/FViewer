@@ -13,8 +13,18 @@ void Renderer::LoadData(Vec3* vertexes, int* indexes, size_t vertexAmount, size_
     vertexArray->AddBuffer(*vertexBuffer, layout);
 }
 
+void Renderer::LoadData(VertexUVNormal* vertexes, size_t amount) {
+    vertexBuffer = std::make_unique<VertexBuffer>(vertexes, amount * sizeof(VertexUVNormal));
+    VertexBufferLayout layout;
+    layout.Push<float>(3);
+    layout.Push<float>(2);
+    layout.Push<float>(3);
+    vertexArray = std::make_unique<VertexArray>();
+    vertexArray->AddBuffer(*vertexBuffer, layout);
+}
+
 void Renderer::Run() {
-    Shader shader("vertex_only.vert", "vertex_only.frag");
+    Shader shader("vertex_uv_norm.vert", "vertex_uv_norm.frag");
 
     OpenGLDebug::Init();
 
@@ -25,7 +35,7 @@ void Renderer::Run() {
         glm::mat4 projection = glm::perspective(glm::radians(45.0f),
                                                 (GLfloat) window->GetWidth() / (GLfloat) window->GetHeight(), 0.1f, 300.0f);
         glm::mat4 view = glm::lookAt(
-                glm::vec3(4, 3, 3),
+                glm::vec3(2, 3, 3),
                 glm::vec3(0, 0, 0),
                 glm::vec3(0, 1, 0)
         );
@@ -38,10 +48,13 @@ void Renderer::Run() {
         shader.SetUniformMat4f("projection", projection);
         shader.SetUniformMat4f("view", view);
         shader.SetUniformMat4f("model", model);
-        vertexArray->Bind();
-        indexBuffer->Bind();
 
-        Draw(*vertexArray, *indexBuffer, shader);
+        if (indexBuffer == nullptr) {
+            Draw(*vertexArray, *vertexBuffer, shader);
+        }
+        else {
+            Draw(*vertexArray, *indexBuffer, shader);
+        }
         window->SwapBuffers();
     }
 }
@@ -68,4 +81,11 @@ void Renderer::Draw(const VertexArray& vao, const IndexBuffer& ebo, const Shader
     ebo.Bind();
     shader.Bind();
     glDrawElements(GL_TRIANGLES, ebo.GetCount(), GL_UNSIGNED_INT, nullptr);
+}
+
+void Renderer::Draw(const VertexArray& vao, const VertexBuffer& vbo, const Shader& shader) {
+    vao.Bind();
+    vbo.Bind();
+    shader.Bind();
+    glDrawArrays(GL_TRIANGLES, 0, vbo.GetSize());
 }

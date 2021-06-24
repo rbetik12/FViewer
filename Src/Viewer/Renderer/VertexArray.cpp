@@ -17,12 +17,11 @@ void VertexArray::UnBind() const {
 void VertexArray::AddBuffer(const VertexBuffer& vb, const VertexBufferLayout& layout) {
     Bind();
     vb.Bind();
-    const auto& elements = layout.elements;
     unsigned int offset = 0;
-    for (unsigned int i = 0; i < elements.size(); i++) {
-        const auto& element = (elements.begin() + i);
+    for (unsigned int i = 0; i < layout.elements.size(); i++) {
+        const auto element = layout.elements[i];
         glEnableVertexAttribArray(i);
-        glVertexAttribPointer(i, element->count, element->type, element->normalized, layout.GetStride(), (const void*) offset);
-        offset += element->count * VertexBufferElement::GetSizeOfType(element->type);
+        glVertexAttribPointer(i, element.count, element.type, element.normalized, layout.GetStride(), (const void*) offset);
+        offset += element.count * VertexBufferElement::GetSizeOfType(element.type);
     }
 }

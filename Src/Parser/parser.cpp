@@ -88,10 +88,10 @@ void SerializeModel(const char* modelName) {
             break;
         case VertexParseType::VertUvNorm:
             header.indexAmount = 0;
-            header.vertexAmount = vertexes.size();
+            header.vertexAmount = vtUvNormVec.size();
 
             fwrite(&header, sizeof(header), 1, modelFile);
-            fwrite(vertexes.data(), sizeof(VertexUVNormal), vertexes.size(), modelFile);
+            fwrite(vtUvNormVec.data(), sizeof(VertexUVNormal), vtUvNormVec.size(), modelFile);
             break;
         case VertexParseType::VertNorm:
             header.indexAmount = 0;
