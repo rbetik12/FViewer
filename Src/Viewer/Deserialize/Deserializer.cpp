@@ -46,3 +46,11 @@ std::pair<VertexUVNormal*, size_t> Deserializer::GetVertUvNormData() const {
 
     return std::pair<VertexUVNormal*, size_t>(vertexes, header.vertexAmount);
 }
+
+std::pair<VertexNormal*, size_t> Deserializer::GetVertNormData() const {
+    auto* vertexes = new VertexNormal[header.vertexAmount];
+
+    fread(vertexes, sizeof(VertexNormal), header.vertexAmount, file);
+
+    return std::pair<VertexNormal*, size_t>(vertexes, header.vertexAmount);
+}

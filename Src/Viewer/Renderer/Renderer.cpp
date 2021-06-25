@@ -12,6 +12,7 @@ void Renderer::LoadData(Vec3* vertexes, int* indexes, size_t vertexAmount, size_
     layout.Push<float>(3);
     vertexArray = std::make_unique<VertexArray>();
     vertexArray->AddBuffer(*vertexBuffer, layout);
+    type = VertexParseType::Vert;
 }
 
 void Renderer::LoadData(VertexUVNormal* vertexes, size_t amount) {
@@ -22,10 +23,29 @@ void Renderer::LoadData(VertexUVNormal* vertexes, size_t amount) {
     layout.Push<float>(3);
     vertexArray = std::make_unique<VertexArray>();
     vertexArray->AddBuffer(*vertexBuffer, layout);
+    type = VertexParseType::VertUvNorm;
+}
+
+void Renderer::LoadData(VertexNormal* vertexes, size_t amount) {
+    vertexBuffer = std::make_unique<VertexBuffer>(vertexes, amount * sizeof(VertexUVNormal));
+    VertexBufferLayout layout;
+    layout.Push<float>(3);
+    layout.Push<float>(3);
+    vertexArray = std::make_unique<VertexArray>();
+    vertexArray->AddBuffer(*vertexBuffer, layout);
+    type = VertexParseType::VertNorm;
 }
 
 void Renderer::Run() {
-    Shader shader("vertex_uv_norm.vert", "vertex_uv_norm.frag");
+    Shader* shader = nullptr;
+    switch(type) {
+        case VertexParseType::VertNorm:
+            shader = new Shader("vertex_norm.vert", "vertex_norm.frag");
+            break;
+        case VertexParseType::VertUvNorm:
+            shader = new Shader("vertex_uv_norm.vert", "vertex_uv_norm.frag");
+            break;
+    }
     Light light;
     OpenGLDebug::Init();
 
@@ -35,7 +55,7 @@ void Renderer::Run() {
 
         glm::mat4 projection = glm::perspective(glm::radians(45.0f),
                                                 (GLfloat) window->GetWidth() / (GLfloat) window->GetHeight(), 0.1f, 300.0f);
-        glm::vec3 cameraPos = glm::vec3(5, 5, 3);
+        glm::vec3 cameraPos = glm::vec3(0, 2, 10);
         glm::mat4 view = glm::lookAt(
                 cameraPos,
                 glm::vec3(0, 0, 0),
@@ -46,32 +66,34 @@ void Renderer::Run() {
         model = glm::translate(model, glm::vec3(0, 0, 0));
         model = glm::rotate(model, glm::radians(20.0f * (float) glfwGetTime()), glm::vec3(0.0f, 1.0f, 0.0f));
         model = glm::scale(model, glm::vec3(1, 1, 1));
-        shader.Bind();
-        shader.SetUniformMat4f("projection", projection);
-        shader.SetUniformMat4f("view", view);
-        shader.SetUniformMat4f("model", model);
-        shader.SetUniform3f("directionalLight.direction", light.GetDirection().x,
+        shader->Bind();
+        shader->SetUniformMat4f("projection", projection);
+        shader->SetUniformMat4f("view", view);
+        shader->SetUniformMat4f("model", model);
+        shader->SetUniform3f("directionalLight.direction", light.GetDirection().x,
                                  light.GetDirection().y,
                                  light.GetDirection().z);
-        shader.SetUniform3f("directionalLight.ambient", light.GetAmbientColor().x,
+        shader->SetUniform3f("directionalLight.ambient", light.GetAmbientColor().x,
                                  light.GetAmbientColor().y,
                                  light.GetAmbientColor().z);
-        shader.SetUniform3f("directionalLight.diffuse", light.GetDiffuseColor().x,
+        shader->SetUniform3f("directionalLight.diffuse", light.GetDiffuseColor().x,
                                  light.GetDiffuseColor().y,
                                  light.GetDiffuseColor().z);
-        shader.SetUniform3f("viewPos", cameraPos);
+        shader->SetUniform3f("viewPos", cameraPos);
         if (indexBuffer == nullptr) {
-            Draw(*vertexArray, *vertexBuffer, shader);
+            Draw(*vertexArray, *vertexBuffer, *shader);
         }
         else {
-            Draw(*vertexArray, *indexBuffer, shader);
+            Draw(*vertexArray, *indexBuffer, *shader);
         }
         window->SwapBuffers();
     }
+
+    delete shader;
 }
 
 Renderer::Renderer() {
-    window = std::make_unique<Window>(800, 600, "FViewer");
+    window = std::make_unique<Window>(1280, 1080, "FViewer");
     Init();
 }
 

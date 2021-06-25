@@ -29,8 +29,20 @@ int main(int argc, char* argv[]) {
         }
         case VertexParseType::VertUv:
             break;
-        case VertexParseType::VertNorm:
+        case VertexParseType::VertNorm: {
+            VertexNormal* vertexes = nullptr;
+            size_t amount = 0;
+
+            std::pair<VertexNormal*, size_t> data = deserializer.GetVertNormData();
+
+            vertexes = data.first;
+            amount = data.second;
+            renderer.LoadData(vertexes, amount);
+            renderer.Run();
+
+            delete[] vertexes;
             break;
+        }
         case VertexParseType::Vert:
             Vec3* vertexes = nullptr;
             int* indexes = nullptr;

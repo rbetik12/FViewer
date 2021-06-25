@@ -8,11 +8,12 @@ extern FILE* yyin;
 
 extern int yyparse();
 
-extern std::vector <Vec3> vertexes;
-extern std::vector <Vec3> normals;
-extern std::vector <Vec2> uvs;
+extern std::vector<Vec3> vertexes;
+extern std::vector<Vec3> normals;
+extern std::vector<Vec2> uvs;
 extern std::vector<int> indexes;
-extern std::vector <VertexUVNormal> vtUvNormVec;
+extern std::vector<VertexUVNormal> vtUvNormVec;
+extern std::vector<VertexNormal> vtNormalVec;
 
 VertexParseType type;
 
@@ -95,10 +96,10 @@ void SerializeModel(const char* modelName) {
             break;
         case VertexParseType::VertNorm:
             header.indexAmount = 0;
-            header.vertexAmount = vertexes.size();
+            header.vertexAmount = vtNormalVec.size();
 
             fwrite(&header, sizeof(header), 1, modelFile);
-            fwrite(vertexes.data(), sizeof(VertexNormal), vertexes.size(), modelFile);
+            fwrite(vtNormalVec.data(), sizeof(VertexNormal), vtNormalVec.size(), modelFile);
             break;
         case VertexParseType::VertUv:
             header.indexAmount = 0;

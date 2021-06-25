@@ -1,6 +1,6 @@
 NAME=obj-parser
 CC=g++
-CC_FLAGS=-std=c++17 -I include
+CC_FLAGS=-std=c++17 -I include -O3 -march=native
 all: build-parser
 
 build-parser: parser.tab.cpp lexer.yy.c
