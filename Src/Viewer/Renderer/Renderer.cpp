@@ -1,5 +1,6 @@
 #include <glm/ext/matrix_clip_space.hpp>
 #include <glm/ext/matrix_transform.hpp>
+#include <imgui.h>
 #include "Renderer.h"
 #include "Shader.h"
 #include "../../Debug/Debug.h"
@@ -7,6 +8,7 @@
 #include "../Input/Input.h"
 #include "../Input/Time.h"
 #include "../Camera/Camera.h"
+#include "../UI/UI.h"
 
 void Renderer::LoadData(Vec3* vertexes, int* indexes, size_t vertexAmount, size_t indexAmount) {
     vertexBuffer = std::make_unique<VertexBuffer>(vertexes, vertexAmount * sizeof(Vec3));
@@ -53,6 +55,7 @@ void Renderer::Run() {
     Camera camera(glm::vec3(0, 2, 10), glm::vec3(0, 1, 0));
     OpenGLDebug::Init();
     Input::Init(*window);
+    UI* ui = UI::Create(window.get());
 
     while (!window->IsShouldClose()) {
         glfwPollEvents();
@@ -63,6 +66,8 @@ void Renderer::Run() {
         if (Input::GetKeyDown(GLFW_KEY_M)) {
             Input::ToggleCursor(*window);
         }
+        auto newLightDir = glm::vec3(10 * sin(glfwGetTime()), 5 * cos(glfwGetTime()), 0);
+        light.SetDirection(newLightDir);
 
         glm::mat4 projection = glm::perspective(glm::radians(45.0f),
                                                 (GLfloat) window->GetWidth() / (GLfloat) window->GetHeight(), 0.1f, 300.0f);
@@ -90,6 +95,15 @@ void Renderer::Run() {
         else {
             Draw(*vertexArray, *indexBuffer, *shader);
         }
+
+        ui->Begin();
+        {
+            ImGui::SetNextWindowPos(ImVec2(0.0f, 0.0f));
+            ImGui::Begin("Debug");
+            ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+            ImGui::End();
+        }
+        ui->End();
         window->SwapBuffers();
     }
 
@@ -97,7 +111,7 @@ void Renderer::Run() {
 }
 
 Renderer::Renderer() {
-    window = std::make_unique<Window>(1280, 1080, "FViewer");
+    window = std::make_unique<Window>(1920, 1080, "FViewer");
     Init();
 }
 

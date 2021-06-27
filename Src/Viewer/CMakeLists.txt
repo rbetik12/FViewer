@@ -4,6 +4,7 @@ include_directories(../Parser/include)
 include_directories(../../Lib/glad/include)
 include_directories(../../Lib/glfw/include)
 include_directories(../../Lib/glm)
+include_directories(../../Lib/imgui)
 add_executable(${PROJECT_NAME} main.cpp
         Deserialize/Deserializer.cpp
         Deserialize/Deserializer.h
@@ -15,7 +16,7 @@ add_executable(${PROJECT_NAME} main.cpp
         Renderer/VertexBufferElement.cpp
         Renderer/Window.h Renderer/Window.cpp
         Renderer/Shader.h Renderer/Shader.cpp
-        ../Debug/Debug.cpp ../Debug/Debug.h Renderer/Light.cpp Renderer/Light.h Input/Input.cpp Input/Input.h Camera/Camera.cpp Camera/Camera.h Input/Time.cpp Input/Time.h)
+        ../Debug/Debug.cpp ../Debug/Debug.h Renderer/Light.cpp Renderer/Light.h Input/Input.cpp Input/Input.h Camera/Camera.cpp Camera/Camera.h Input/Time.cpp Input/Time.h UI/UI.cpp UI/UI.h)
 
-target_link_libraries(${PROJECT_NAME} glad glfw)
+target_link_libraries(${PROJECT_NAME} glad glfw imgui)
 

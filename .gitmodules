@@ -1,3 +1,6 @@
 [submodule "Lib/glfw"]
 	path = Lib/glfw
 	url = https://github.com/glfw/glfw.git
+[submodule "Lib/imgui"]
+	path = Lib/imgui
+	url = https://github.com/rbetik12/imgui.git
