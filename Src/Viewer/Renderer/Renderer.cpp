@@ -5,6 +5,8 @@
 #include "../../Debug/Debug.h"
 #include "Light.h"
 #include "../Input/Input.h"
+#include "../Input/Time.h"
+#include "../Camera/Camera.h"
 
 void Renderer::LoadData(Vec3* vertexes, int* indexes, size_t vertexAmount, size_t indexAmount) {
     vertexBuffer = std::make_unique<VertexBuffer>(vertexes, vertexAmount * sizeof(Vec3));
@@ -48,29 +50,29 @@ void Renderer::Run() {
             break;
     }
     Light light;
+    Camera camera(glm::vec3(0, 2, 10), glm::vec3(0, 1, 0));
     OpenGLDebug::Init();
     Input::Init(*window);
 
     while (!window->IsShouldClose()) {
         glfwPollEvents();
         Clear();
+        Time::Update();
+        camera.Update();
+
+        if (Input::GetKeyDown(GLFW_KEY_M)) {
+            Input::ToggleCursor(*window);
+        }
 
         glm::mat4 projection = glm::perspective(glm::radians(45.0f),
                                                 (GLfloat) window->GetWidth() / (GLfloat) window->GetHeight(), 0.1f, 300.0f);
-        glm::vec3 cameraPos = glm::vec3(0, 2, 10);
-        glm::mat4 view = glm::lookAt(
-                cameraPos,
-                glm::vec3(0, 0, 0),
-                glm::vec3(0, 1, 0)
-        );
 
         glm::mat4 model = glm::mat4(1.0f);
         model = glm::translate(model, glm::vec3(0, 0, 0));
-        model = glm::rotate(model, glm::radians(20.0f * (float) glfwGetTime()), glm::vec3(0.0f, 1.0f, 0.0f));
         model = glm::scale(model, glm::vec3(1, 1, 1));
         shader->Bind();
         shader->SetUniformMat4f("projection", projection);
-        shader->SetUniformMat4f("view", view);
+        shader->SetUniformMat4f("view", camera.GetViewMatrix());
         shader->SetUniformMat4f("model", model);
         shader->SetUniform3f("directionalLight.direction", light.GetDirection().x,
                                  light.GetDirection().y,
@@ -81,7 +83,7 @@ void Renderer::Run() {
         shader->SetUniform3f("directionalLight.diffuse", light.GetDiffuseColor().x,
                                  light.GetDiffuseColor().y,
                                  light.GetDiffuseColor().z);
-        shader->SetUniform3f("viewPos", cameraPos);
+        shader->SetUniform3f("viewPos", camera.GetPosition());
         if (indexBuffer == nullptr) {
             Draw(*vertexArray, *vertexBuffer, *shader);
         }

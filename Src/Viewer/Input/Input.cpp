@@ -1,9 +1,13 @@
+#include <iostream>
 #include "Input.h"
 
 void Input::Init(Window window) {
     GLFWwindow* rawWindow = window.GetWindow();
 
     Input::Flush();
+    Input::ToggleCursor(window);
+    if (glfwRawMouseMotionSupported())
+        glfwSetInputMode(rawWindow, GLFW_RAW_MOUSE_MOTION, GLFW_TRUE);
 
     glfwSetKeyCallback(rawWindow, [](GLFWwindow* window, int key, int scancode, int action, int mods) {
         if (action == GLFW_PRESS)
@@ -62,8 +66,19 @@ void Input::Flush() {
 }
 
 float Input::pitch = 0;
-float Input::yaw = 0;
+float Input::yaw = -90;
 float Input::cursorX = 0;
 float Input::cursorY = 0;
 bool Input::keys[1024] = {};
 bool Input::firstFrame = true;
+bool Input::isCursor = true;
+
+void Input::ToggleCursor(Window window) {
+    isCursor = !isCursor;
+    if (isCursor) {
+        glfwSetInputMode(window.GetWindow(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+    }
+    else {
+        glfwSetInputMode(window.GetWindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    }
+}
