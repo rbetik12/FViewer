@@ -4,6 +4,7 @@
 #include "Shader.h"
 #include "../../Debug/Debug.h"
 #include "Light.h"
+#include "../Input/Input.h"
 
 void Renderer::LoadData(Vec3* vertexes, int* indexes, size_t vertexAmount, size_t indexAmount) {
     vertexBuffer = std::make_unique<VertexBuffer>(vertexes, vertexAmount * sizeof(Vec3));
@@ -48,6 +49,7 @@ void Renderer::Run() {
     }
     Light light;
     OpenGLDebug::Init();
+    Input::Init(*window);
 
     while (!window->IsShouldClose()) {
         glfwPollEvents();

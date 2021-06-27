@@ -15,7 +15,7 @@ add_executable(${PROJECT_NAME} main.cpp
         Renderer/VertexBufferElement.cpp
         Renderer/Window.h Renderer/Window.cpp
         Renderer/Shader.h Renderer/Shader.cpp
-        ../Debug/Debug.cpp ../Debug/Debug.h Renderer/Light.cpp Renderer/Light.h)
+        ../Debug/Debug.cpp ../Debug/Debug.h Renderer/Light.cpp Renderer/Light.h Input/Input.cpp Input/Input.h)
 
 target_link_libraries(${PROJECT_NAME} glad glfw)
 
