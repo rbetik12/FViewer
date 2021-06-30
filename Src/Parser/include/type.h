@@ -40,5 +40,6 @@ struct ModelHeader {
     VertexParseType type;
     uint64_t vertexAmount;
     uint64_t indexAmount;
+    uint64_t facesAmount;
 };
 #pragma pack(pop)

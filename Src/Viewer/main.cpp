@@ -11,6 +11,8 @@ int main(int argc, char* argv[]) {
 	deserializer.Deserialize(argv[1]);
 
 	Renderer renderer;
+	renderer.faces = deserializer.GetModelHeader().facesAmount;
+	renderer.vertexes = deserializer.GetModelHeader().vertexAmount;
 
     switch (deserializer.GetDataType()) {
         case VertexParseType::VertUvNorm: {

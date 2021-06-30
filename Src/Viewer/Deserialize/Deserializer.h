@@ -16,6 +16,7 @@ public:
     std::pair<VertexUVNormal*, size_t> GetVertUvNormData() const;
     std::pair<VertexNormal*, size_t> GetVertNormData() const;
     std::pair<size_t, size_t> GetAmount() const;
+    inline ModelHeader GetModelHeader() const {return header;}
 private:
     ModelHeader header;
     FILE* file = nullptr;

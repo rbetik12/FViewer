@@ -19,6 +19,7 @@
     std::vector<VertexUVNormal> vtUvNormVec;
     std::vector<VertexUV> vtUvVec;
     std::vector<VertexNormal> vtNormalVec;
+    uint64_t facesAmount = 0;
 %}
 
 %start obj
@@ -140,7 +141,9 @@ uv:
 	;
 
 face:
-	FACE indexes
+	FACE indexes {
+	    facesAmount += 1;
+	}
 	;
 
 indexes:

@@ -17,7 +17,8 @@ public:
     void LoadData(VertexNormal* vertexes, size_t amount);
 
     void Run();
-
+    uint64_t faces;
+    uint64_t vertexes;
 private:
     std::unique_ptr<VertexBuffer> vertexBuffer;
     std::unique_ptr<IndexBuffer> indexBuffer;

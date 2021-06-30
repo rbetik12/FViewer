@@ -14,6 +14,7 @@ extern std::vector<Vec2> uvs;
 extern std::vector<int> indexes;
 extern std::vector<VertexUVNormal> vtUvNormVec;
 extern std::vector<VertexNormal> vtNormalVec;
+extern uint64_t facesAmount;
 
 VertexParseType type;
 
@@ -77,6 +78,7 @@ void SerializeModel(const char* modelName) {
     }
 
     header.type = type;
+    header.facesAmount = facesAmount;
 
     switch (type) {
         case VertexParseType::Vert:
