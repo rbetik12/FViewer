@@ -33,4 +33,5 @@ private:
     void Draw(const VertexArray& vao, const VertexBuffer& vbo, const Shader& shader);
     VertexParseType type;
     bool isLight = true;
+    bool rotateLight = true;
 };

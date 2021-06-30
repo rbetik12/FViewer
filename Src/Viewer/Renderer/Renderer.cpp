@@ -56,6 +56,9 @@ void Renderer::Run() {
     OpenGLDebug::Init();
     Input::Init(*window);
     UI* ui = UI::Create(window.get());
+    float leftRotation = 0.0f;
+    float rightRotation = 0.0f;
+    float lightTime = 0.0f;
 
     while (!window->IsShouldClose()) {
         glfwPollEvents();
@@ -68,13 +71,24 @@ void Renderer::Run() {
         else {
             camera.Update();
         }
-        auto newLightDir = glm::vec3(10 * sin(glfwGetTime()), 5 * cos(glfwGetTime()), 0);
-        light.SetDirection(newLightDir);
+        glm::mat4 model = glm::mat4(1.0f);
+        if (Input::GetKeyDown(GLFW_KEY_Q)) {
+            leftRotation += 0.1f;
+        }
+        else if (Input::GetKeyDown(GLFW_KEY_E)) {
+            rightRotation += 0.1f;
+        }
+        model = glm::rotate(model, 20.0f * glm::radians(-leftRotation + rightRotation), glm::vec3(0, 1, 0));
+
+        if (rotateLight) {
+            auto newLightDir = glm::vec3(10 * sin(lightTime), 5 * cos(glfwGetTime()), 0);
+            light.SetDirection(newLightDir);
+            lightTime += 0.001f;
+        }
 
         glm::mat4 projection = glm::perspective(glm::radians(45.0f),
                                                 (GLfloat) window->GetWidth() / (GLfloat) window->GetHeight(), 0.1f, 300.0f);
 
-        glm::mat4 model = glm::mat4(1.0f);
         model = glm::translate(model, glm::vec3(0, 0, 0));
         model = glm::scale(model, glm::vec3(1, 1, 1));
         shader->Bind();
@@ -105,9 +119,10 @@ void Renderer::Run() {
             ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
             ImGui::Text("Faces: %llu", faces);
             ImGui::Text("Vertexes: %llu", vertexes);
-            if (ImGui::Checkbox("Light", &isLight)) {
-            }
+            if (ImGui::Checkbox("Light", &isLight)) {}
+            if (ImGui::Checkbox("Animate light", &rotateLight)) {}
             shader->SetUniform1i("isLight", isLight);
+            ImGui::TextUnformatted("WASD - camera movement\nMouse - camera rotation\nQ - turn model left\nE - turn model right");
             ImGui::End();
         }
         ui->End();
