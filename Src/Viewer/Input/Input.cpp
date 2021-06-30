@@ -82,3 +82,13 @@ void Input::ToggleCursor(Window window) {
         glfwSetInputMode(window.GetWindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     }
 }
+
+void Input::ToggleCursor(Window window, bool isOn) {
+    isCursor = isOn;
+    if (isCursor) {
+        glfwSetInputMode(window.GetWindow(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+    }
+    else {
+        glfwSetInputMode(window.GetWindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    }
+}

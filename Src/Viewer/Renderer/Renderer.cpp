@@ -61,10 +61,12 @@ void Renderer::Run() {
         glfwPollEvents();
         Clear();
         Time::Update();
-        camera.Update();
 
-        if (Input::GetKeyDown(GLFW_KEY_M)) {
-            Input::ToggleCursor(*window);
+        if (Input::GetKeyDown(GLFW_KEY_LEFT_CONTROL)) {
+            Input::ToggleCursor(*window, true);
+        }
+        else {
+            camera.Update();
         }
         auto newLightDir = glm::vec3(10 * sin(glfwGetTime()), 5 * cos(glfwGetTime()), 0);
         light.SetDirection(newLightDir);
@@ -103,6 +105,9 @@ void Renderer::Run() {
             ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
             ImGui::Text("Faces: %llu", faces);
             ImGui::Text("Vertexes: %llu", vertexes);
+            if (ImGui::Checkbox("Light", &isLight)) {
+            }
+            shader->SetUniform1i("isLight", isLight);
             ImGui::End();
         }
         ui->End();

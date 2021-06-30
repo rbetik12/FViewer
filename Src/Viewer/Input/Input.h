@@ -10,6 +10,7 @@ public:
     static bool GetKeyDown(int keycode);
     static std::pair<float, float> GetMouseYawAndPitch();
     static void ToggleCursor(Window window);
+    static void ToggleCursor(Window window, bool isOn);
 private:
     static bool keys[1024];
     static float yaw;
